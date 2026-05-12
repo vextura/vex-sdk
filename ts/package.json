@@ -1,0 +1,23 @@
+{
+  "name": "@vextura/vex-sdk",
+  "version": "1.0.0",
+  "description": "Vextura VexEdge function SDK for TypeScript/Node.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test dist/**/*.test.js"
+  },
+  "keywords": ["vextura", "vexedge", "workflow"],
+  "license": "MIT",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vextura/vex-sdk.git"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  }
+}

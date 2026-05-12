@@ -1,0 +1,90 @@
+name: Release vex-sdk
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g. v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Extract version
+      id: version
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          VERSION="${{ github.event.inputs.version }}"
+        else
+          VERSION=${GITHUB_REF#refs/tags/}
+        fi
+        echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
+
+    - name: Set up Java 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+
+    - name: Set up Gradle
+      uses: gradle/actions/setup-gradle@v3
+
+    - name: Update Java SDK version
+      run: |
+        VERSION="${{ steps.version.outputs.VERSION }}"
+        VER=${VERSION#v}
+        sed -i "s/^version = .*/version = '${VER}'/" java/build.gradle
+
+    - name: Publish Java SDK to GitHub Packages
+      working-directory: java
+      continue-on-error: true
+      run: gradle publishGprPublicationToGitHubPackagesRepository
+      env:
+        GITHUB_ACTOR: ${{ github.actor }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        registry-url: 'https://npm.pkg.github.com'
+
+    - name: Publish TypeScript SDK to GitHub Packages
+      working-directory: ts
+      continue-on-error: true
+      run: |
+        VERSION="${{ steps.version.outputs.VERSION }}"
+        VER=${VERSION#v}
+        npm version $VER --no-git-tag-version
+        npm ci
+        npm run build
+        npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create or update tag (workflow_dispatch)
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        git config user.email "actions@github.com"
+        git config user.name "GitHub Actions"
+        git tag -f "${{ steps.version.outputs.VERSION }}"
+        git push origin "${{ steps.version.outputs.VERSION }}" --force
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ steps.version.outputs.VERSION }}
+        generate_release_notes: true
