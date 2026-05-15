@@ -1,0 +1,28 @@
+name: Publish UWF TypeScript SDK
+
+on:
+  push:
+    tags: ['v*']
+    paths: ['uwf/typescript/**']
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@vextura'
+      - run: npm ci
+        working-directory: uwf/typescript
+      - run: npm run build
+        working-directory: uwf/typescript
+      - run: npm publish
+        working-directory: uwf/typescript
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

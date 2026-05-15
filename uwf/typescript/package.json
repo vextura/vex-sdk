@@ -1,0 +1,41 @@
+{
+  "name": "@vextura/sdk",
+  "version": "1.2.0",
+  "description": "Vextura Workflow Engine — official TypeScript/JavaScript SDK",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "module": "dist/index.mjs",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "src"],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "jest"
+  },
+  "keywords": ["vextura", "workflow", "orchestration", "fintech", "banking"],
+  "license": "Apache-2.0",
+  "author": "Vextura Inc.",
+  "homepage": "https://docs.vextura.io/sdk/typescript",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vextura-io/sdk"
+  },
+  "dependencies": {
+    "axios": "^1.7.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.4.0",
+    "@types/node": "^20.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

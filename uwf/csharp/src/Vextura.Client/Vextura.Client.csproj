@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>Vextura.Client</RootNamespace>
+    <AssemblyName>Vextura.Client</AssemblyName>
+    <Version>1.0.0</Version>
+    <Authors>Vextura</Authors>
+    <Description>C# client SDK for Vextura workflow engine — define steps and workflows with minimal code.</Description>
+    <PackageTags>vextura;workflow;sdk</PackageTags>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+</Project>
