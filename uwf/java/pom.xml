@@ -32,6 +32,14 @@
     <junit.version>5.11.0</junit.version>
   </properties>
 
+  <distributionManagement>
+    <repository>
+      <id>github</id>
+      <name>GitHub Packages</name>
+      <url>https://maven.pkg.github.com/vextura/vex-sdk</url>
+    </repository>
+  </distributionManagement>
+
   <dependencies>
     <!-- HTTP client — Apache HttpClient 5 (Java 11+ compatible, modern API) -->
     <dependency>
@@ -71,7 +79,6 @@
           <source>21</source>
           <target>21</target>
           <release>21</release>
-
         </configuration>
       </plugin>
       <plugin>
